@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./ProductCard.css";
 
-export function ProductCard({ product, background = "slategray", onPurchase }) {
+export function ProductCard({ product, background = "slategray", onPurchase, onFavorite, isFavorite }) {
   const [stockCount, setStockCount] = useState(product.stockCount);
   const [showDetail, setShowDetail] = useState(false);
   function handleStock() {
@@ -14,8 +14,11 @@ export function ProductCard({ product, background = "slategray", onPurchase }) {
   }
   return (
     <article className="Container" style={{ background }}>
+      <button className="Favorite" onClick={() => onFavorite(product.id)}>
+        {isFavorite ? "⛊" : "⛉"}
+      </button>
       <h2> {product.title} </h2>
-      <img src={product.imageSrc} alt="iPhone 15 Pro" width={128} height={128} />
+      <img src={product.imageSrc} alt={product.title} width={128} height={128} />
       <p>
         Specification:
         <button onClick={() => setShowDetail(!showDetail)}>{showDetail ? "Hide" : "Show"}</button>

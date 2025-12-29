@@ -17,6 +17,7 @@ const Styles = {
 function App() {
   const products = [
     {
+      id: 1,
       imageSrc: "images/iphone.png",
       title: "iPhone 15 Pro",
       specification: ["A17 Pro chip with 6-core GPU", "3x or 5x Telephoto camera", "Up to 29 hours video playback"],
@@ -24,6 +25,7 @@ function App() {
       stockCount: 10,
     },
     {
+      id: 2,
       imageSrc: "images/airpods.png",
       title: "AirPods Pro 2",
       specification: ["Noise Cancellation", "Dust, sweat, and water resistant", "Up to 6 hours of listening"],
@@ -31,6 +33,7 @@ function App() {
       stockCount: 0,
     },
     {
+      id: 3,
       imageSrc: "images/apple-watch.png",
       title: "Apple Watch 9",
       specification: ["45mm or 41mm case size", "Always-On Retina display", "Up to 18 hours normal use"],
@@ -45,6 +48,7 @@ function App() {
     },
     other: "other value",
   });
+  const [favorites, setFavorites] = useState([]);
   function handleFilter(key, value) {
     setFilters((prevFilter) => ({
       ...prevFilter,
@@ -57,11 +61,22 @@ function App() {
   function onPurchase(product) {
     alert(`You Clicked ${product.title} , which the price is $${product.price}`);
   }
+  function handleFavorites(productId) {
+    if (favorites.includes(productId)) {
+      // remove
+      setFavorites((prevFavorites) => prevFavorites.filter((id) => id !== productId));
+      // alert("Product has Removed");
+    } else {
+      // add
+      setFavorites((prevFavorites) => [...prevFavorites, productId]);
+      // alert("Product has Added");
+    }
+  }
   return (
     <div className="App">
       <ProductList>
         {products.map((product, index) => (
-          <ProductCard key={index} product={product} onPurchase={onPurchase} />
+          <ProductCard key={index} product={product} onPurchase={onPurchase} onFavorite={handleFavorites} isFavorite={favorites.includes(product.id)} />
         ))}
       </ProductList>
       <h2> Product wich cost up to $500 </h2>
