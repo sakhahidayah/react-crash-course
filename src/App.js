@@ -1,23 +1,62 @@
-import logo from './logo.svg';
-import './App.css';
+import { Fragment } from "react/jsx-runtime";
+import { ProductCard } from "./components/ProductCard";
+import { ProductList } from "./components/ProductList.js";
+import "./App.css";
+
+const Styles = {
+  ListDevider: {
+    borderColor: "slategray",
+  },
+  ListTitle: {
+    margin: "8px",
+  },
+};
 
 function App() {
+  const products = [
+    {
+      imageSrc: "images/iphone.png",
+      title: "iPhone 15 Pro",
+      specification: ["A17 Pro chip with 6-core GPU", "3x or 5x Telephoto camera", "Up to 29 hours video playback"],
+      price: 999,
+      stockCount: 10,
+    },
+    {
+      imageSrc: "images/airpods.png",
+      title: "AirPods Pro 2",
+      specification: ["Noise Cancellation", "Dust, sweat, and water resistant", "Up to 6 hours of listening"],
+      price: 249,
+      stockCount: 0,
+    },
+    {
+      imageSrc: "images/apple-watch.png",
+      title: "Apple Watch 9",
+      specification: ["45mm or 41mm case size", "Always-On Retina display", "Up to 18 hours normal use"],
+      price: 399,
+      stockCount: 199,
+    },
+  ];
+  function onPurchase(product) {
+    alert(`You Clicked ${product.title} , which the price is $${product.price}`);
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ProductList>
+        {products.map((product, index) => (
+          <ProductCard key={index} product={product} onPurchase={onPurchase} />
+        ))}
+      </ProductList>
+      <h2> Product wich cost up to $500 </h2>
+      {products
+        .filter(({ price }) => price < 500)
+        .map(({ title, price }) => (
+          <Fragment key={title}>
+            <hr style={Styles.ListDevider} />
+            <li style={Styles.ListTitle}>
+              {title} Cost {price}
+            </li>
+          </Fragment>
+        ))}
     </div>
   );
 }
