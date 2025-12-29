@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { Fragment } from "react/jsx-runtime";
+import { ProductFilter } from "./components/ProductFilter.js";
 import { ProductCard } from "./components/ProductCard";
 import { ProductList } from "./components/ProductList.js";
 import "./App.css";
@@ -36,6 +38,22 @@ function App() {
       stockCount: 199,
     },
   ];
+  const [filters, setFilters] = useState({
+    price: {
+      min: 0,
+      max: 999,
+    },
+    other: "other value",
+  });
+  function handleFilter(key, value) {
+    setFilters((prevFilter) => ({
+      ...prevFilter,
+      price: {
+        ...prevFilter.price,
+        [key]: value,
+      },
+    }));
+  }
   function onPurchase(product) {
     alert(`You Clicked ${product.title} , which the price is $${product.price}`);
   }
@@ -47,8 +65,9 @@ function App() {
         ))}
       </ProductList>
       <h2> Product wich cost up to $500 </h2>
+      <ProductFilter filters={filters} onFilter={handleFilter} />
       {products
-        .filter(({ price }) => price < 500)
+        .filter(({ price }) => price >= filters.price.min && price <= filters.price.max)
         .map(({ title, price }) => (
           <Fragment key={title}>
             <hr style={Styles.ListDevider} />
