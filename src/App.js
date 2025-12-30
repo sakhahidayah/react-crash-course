@@ -3,6 +3,7 @@ import { Fragment } from "react/jsx-runtime";
 import { ProductFilter } from "./components/ProductFilter.js";
 import { ProductCard } from "./components/ProductCard";
 import { ProductList } from "./components/ProductList.js";
+import { products as productData } from "./data/Products.js"; // import product data
 import "./App.css";
 
 const Styles = {
@@ -15,32 +16,7 @@ const Styles = {
 };
 
 function App() {
-  const products = [
-    {
-      id: 1,
-      imageSrc: "images/iphone.png",
-      title: "iPhone 15 Pro",
-      specification: ["A17 Pro chip with 6-core GPU", "3x or 5x Telephoto camera", "Up to 29 hours video playback"],
-      price: 999,
-      stockCount: 10,
-    },
-    {
-      id: 2,
-      imageSrc: "images/airpods.png",
-      title: "AirPods Pro 2",
-      specification: ["Noise Cancellation", "Dust, sweat, and water resistant", "Up to 6 hours of listening"],
-      price: 249,
-      stockCount: 0,
-    },
-    {
-      id: 3,
-      imageSrc: "images/apple-watch.png",
-      title: "Apple Watch 9",
-      specification: ["45mm or 41mm case size", "Always-On Retina display", "Up to 18 hours normal use"],
-      price: 399,
-      stockCount: 199,
-    },
-  ];
+  const [products, setProducts] = useState(productData); // set product as state
   const [filters, setFilters] = useState({
     price: {
       min: 0,
@@ -58,23 +34,26 @@ function App() {
       },
     }));
   }
-  function onPurchase(product) {
-    alert(`You Clicked ${product.title} , which the price is $${product.price}`);
+  function onPurchase(productId, stockCount) {
+    // receive data from children {product id and stockCount }\
+    // mapping data product from children , and pass it to state [setProducts]
+    setProducts((prevProducts) => prevProducts.map((product) => (product.id === productId ? { ...product, stockCount } : product)));
   }
   function handleFavorites(productId) {
     if (favorites.includes(productId)) {
       // remove
       setFavorites((prevFavorites) => prevFavorites.filter((id) => id !== productId));
-      // alert("Product has Removed");
+      alert("Product has Removed");
     } else {
       // add
       setFavorites((prevFavorites) => [...prevFavorites, productId]);
-      // alert("Product has Added");
+      alert("Product has Added");
     }
   }
   return (
     <div className="App">
       <ProductList>
+        {/* Send product to children components */}
         {products.map((product, index) => (
           <ProductCard key={index} product={product} onPurchase={onPurchase} onFavorite={handleFavorites} isFavorite={favorites.includes(product.id)} />
         ))}
